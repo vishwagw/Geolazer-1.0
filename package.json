@@ -1,0 +1,125 @@
+{
+  "name": "geolazer",
+  "version": "0.1.0",
+  "description": "Live geopolitics analysis and prediction platform with interactive mapping and real-time intelligence",
+  "main": "dist/main/main.js",
+  "homepage": "./",
+  "author": {
+    "name": "Geolazer Team"
+  },
+  "license": "Proprietary",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "frontend": "cd src/renderer && react-scripts start",
+    "backend": "nodemon --exec ts-node src/backend/server.ts",
+    "build": "npm run build:backend && npm run build:frontend && npm run build:electron",
+    "build:frontend": "cd src/renderer && react-scripts build && move /Y build ..\\..\\dist\\renderer",
+    "build:backend": "tsc --project src/backend/tsconfig.json",
+    "build:electron": "tsc --project src/main/tsconfig.json",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:linux": "npm run build && electron-builder --linux",
+    "dist:all": "npm run build && electron-builder --win --mac --linux",
+    "setup-icons": "node scripts/setup-icons.js",
+    "prestart": "npm run build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "express": "^4.18.2",
+    "leaflet": "^1.9.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1",
+    "react-router": "^6.15.0",
+    "recharts": "^2.10.0",
+    "socket.io": "^4.6.0",
+    "socket.io-client": "^4.6.0",
+    "typescript": "^5.2.2",
+    "zustand": "^4.4.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.19",
+    "@types/minimatch": "^6.0.0",
+    "@types/node": "^20.5.5",
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
+    "autoprefixer": "^10.4.16",
+    "concurrently": "^8.2.1",
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4",
+    "electron-webpack": "^2.8.0",
+    "nodemon": "^3.0.1",
+    "postcss": "^8.4.31",
+    "react-scripts": "5.0.1",
+    "tailwindcss": "^3.3.4",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  },
+  "build": {
+    "appId": "com.geolazer.app",
+    "productName": "Geolazer",
+    "files": [
+      "dist/**/*",
+      "public/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "public",
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "public/assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Geolazer"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.exe"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "public/assets/icon.png",
+      "category": "public.app-category.utilities"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150,
+          "type": "file"
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "public/assets/icon.png",
+      "category": "Utility"
+    }
+  }
+}
